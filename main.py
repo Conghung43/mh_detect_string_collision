@@ -11,7 +11,8 @@ import utils.measure_string_width as measure_string_width
 from display import main_display
 import string_class
 from utils import new_point_verify
-from utils import get_white_pixel_postition
+from utils import string_clustering
+
 def append_new_string(string_property,peak_pixel, string_width):
     string_property.append(string_class.WhiteString())
     string_property[-1].set(peak_pixel,
@@ -19,7 +20,7 @@ def append_new_string(string_property,peak_pixel, string_width):
     return string_property
 
 system_config = init_config.get_config_data()
-image = cv2.imread('testing_set/IMG_1068.jpg')
+image = cv2.imread('testing_set/IMG_1068_modified.JPG')
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 heigh, width = gray.shape
 pattent_xaxis_list = (np.array(literal_eval(system_config['program']['pattent_xaxis_list']))*heigh).astype(int)
@@ -39,7 +40,7 @@ for pattent_xaxis in pattent_xaxis_list:
                                             peak_distance,
                                             pattent_yaxis_list[0])
     # main_display.show_gray_image_threadhold(gray, average_threadhold)
-    get_white_pixel_postition.image_processing(gray, (pattent_xaxis_frame, pattent_yaxis_list), average_threadhold)
+    string_clustering.image_processing(gray, (pattent_xaxis_frame, pattent_yaxis_list), average_threadhold)
     string_width_list = measure_string_width.measure_string_width(data_list, 
                                             average_threadhold)
     # Based on tracking
