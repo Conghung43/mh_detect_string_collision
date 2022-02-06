@@ -14,7 +14,8 @@ def get_string_property(gray_xaxis_list,threadhold_from_peak, peak_distance, sta
         peaks, peak_heigh_dict = find_peaks(gray_xaxis_list, 
                                     height=average_peak_heigh - threadhold_from_peak, 
                                     distance= peak_distance)
-    average_threadhold_heigh = np.mean(peak_heigh_dict['peak_heights']).astype(int) -threadhold_from_peak
+    # average_threadhold_heigh = np.mean(peak_heigh_dict['peak_heights']).astype(int) -threadhold_from_peak
+    average_threadhold_heigh = (peak_heigh_dict['peak_heights'].max()).astype(int) -threadhold_from_peak
     return average_threadhold_heigh, peaks + start_left
 
     # peaks = list(np.asarray(peaks) + start_left-1)
