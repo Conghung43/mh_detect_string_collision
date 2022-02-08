@@ -20,9 +20,9 @@ def image_processing(gray, crop_value, threadhold_value):
         first_array = np.take(pixel_list, 
                         (np.where(label == label_index)[0]), 
                         0)
-        f =  open('testing_set/{}.npy'.format('first_array'), 'a') 
-        np.save('testing_set/{}.npy'.format('first_array'), first_array)
-        f.close()
+        # f =  open('testing_set/{}.npy'.format('first_array'), 'a') 
+        # np.save('testing_set/{}.npy'.format('first_array'), first_array)
+        # f.close()
         # plt.scatter(pixel_list[:, 0], 
         #         pixel_list[:, 1],
         #         c = clustering.labels_,

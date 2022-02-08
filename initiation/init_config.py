@@ -1,7 +1,6 @@
 import configparser
 import cv2
 
-
 def get_config_data():
     config = configparser.ConfigParser()
     config.read("config/config.cfg", encoding="utf-8")
