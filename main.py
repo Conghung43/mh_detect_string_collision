@@ -41,7 +41,7 @@ for pattent_xaxis in pattent_xaxis_list:
                                             peak_distance,
                                             pattent_yaxis_list[0])
     # main_display.show_gray_image_threadhold(gray, average_threadhold)
-    string_clustering.image_processing(gray, (pattent_xaxis_frame, pattent_yaxis_list), average_threadhold, head_tail_diff_ratio)
+    string_clustering.image_processing(image, (pattent_xaxis_frame, pattent_yaxis_list), average_threadhold, head_tail_diff_ratio)
     string_width_list = measure_string_width.measure_string_width(data_list, 
                                             average_threadhold)
     # Based on tracking

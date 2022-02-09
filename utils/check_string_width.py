@@ -10,15 +10,17 @@ import numpy as np
 
 def head_tail_size_comparision(ratio_list, diff_ratio):
     first_size, second_side = ratio_list
+    big_side = 0
     if first_size > second_side:
         two_side_ratio = first_size/second_side
     else:
         two_side_ratio = second_side/first_size
+        big_side = 1
     print(two_side_ratio)
     if two_side_ratio > diff_ratio:
-        return False
+        return True, big_side
     else:
-        return True
+        return False, big_side
 def get_side_size(string_pixel_list, head_tail_diff_ratio):
     x_list = string_pixel_list[:,0]
     y_list = string_pixel_list[:,1]
@@ -30,12 +32,21 @@ def get_side_size(string_pixel_list, head_tail_diff_ratio):
             three_position = []
             for three_pos_index in range(2):
                 if index == 0:
-                   three_position.append(x_list.min() + int((three_pos_index + 1)*y_max/4))
+                    min_x_side = x_list.min() + int((three_pos_index + 1)*y_max/4)
+                    three_position.append(min_x_side)
                 else:
-                    three_position.append(x_list.max() - int((three_pos_index + 1)*y_max/4))
+                    max_x_size =x_list.max() - int((three_pos_index + 1)*y_max/4)
+                    three_position.append(max_x_size)
             ratio_list.append(check3point(string_pixel_list,three_position, 0))
-        if not head_tail_size_comparision(ratio_list, head_tail_diff_ratio):
+        collision, biger_side = head_tail_size_comparision(ratio_list, head_tail_diff_ratio)
+        draw_point = []
+        if collision:
             print(ratio_list)
+            if biger_side == 0:
+                draw_point = [[min_x_side, y_pos] for y_pos in np.where(string_pixel_list[:,0]==min_x_side)[0]]
+            else:
+                draw_point = [[max_x_size, y_pos] for y_pos in np.where(string_pixel_list[:,0]==max_x_size)[0]]
+    return collision, draw_point
 
 def check3point(string_pixel_list,three_position, element_index):
     string_width = 0

@@ -1,3 +1,4 @@
+from tracemalloc import start
 import cv2
 from numpy import imag
 from display import visualization
@@ -6,8 +7,9 @@ import time
 from sklearn.cluster import DBSCAN
 import matplotlib.pyplot as plt
 from utils import check_string_width
-def image_processing(gray, crop_value, threadhold_value, head_tail_diff_ratio):
+def image_processing(image, crop_value, threadhold_value, head_tail_diff_ratio):
     start_time = time.time()
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     crop_image = gray[crop_value[0][0]:crop_value[0][1], crop_value[1][0]:crop_value[1][1]]
     _, converted_image = cv2.threshold(crop_image, threadhold_value, 255, cv2.THRESH_BINARY)
     visualization.write_image('display', 'test_cut_line', converted_image)
@@ -26,7 +28,13 @@ def image_processing(gray, crop_value, threadhold_value, head_tail_diff_ratio):
         x_max =  x_list.max() -  x_list.min()
         if x_max*1.5 > crop_image.shape[0]:
             # print(len(first_array[:,0]))
-            check_string_width.get_side_size(first_array,head_tail_diff_ratio)
+            collision, draw_points = check_string_width.get_side_size(first_array,head_tail_diff_ratio)
+            if collision:
+                start_point = tuple(np.array(draw_points[0])+ np.array([crop_value[1][0],crop_value[0][0]]))
+                end_point = tuple(np.array(draw_points[-1])+ np.array([crop_value[1][0],crop_value[0][0]]))
+                image = cv2.circle(image, start_point, 2, [0,255,255], 5)
+    cv2.imshow('image', image)
+    cv2.waitKey(0)
         # f =  open('testing_set/{}.npy'.format('first_array'), 'a') 
         # np.save('testing_set/{}.npy'.format('first_array'), first_array)
         # f.close()
