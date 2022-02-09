@@ -30,6 +30,7 @@ threadhold_from_peak = int(system_config['program']['threadhold_from_peak'])
 peak_distance = int(system_config['program']['peak_distance'])
 default_value = int(system_config['program']['default_value'])
 valid_angle = int(system_config['program']['valid_angle'])
+head_tail_diff_ratio = float(system_config['program']['head_tail_diff_ratio'])
 s_time= time.time()
 string_property = []
 for pattent_xaxis in pattent_xaxis_list:
@@ -40,7 +41,7 @@ for pattent_xaxis in pattent_xaxis_list:
                                             peak_distance,
                                             pattent_yaxis_list[0])
     # main_display.show_gray_image_threadhold(gray, average_threadhold)
-    string_clustering.image_processing(gray, (pattent_xaxis_frame, pattent_yaxis_list), average_threadhold)
+    string_clustering.image_processing(gray, (pattent_xaxis_frame, pattent_yaxis_list), average_threadhold, head_tail_diff_ratio)
     string_width_list = measure_string_width.measure_string_width(data_list, 
                                             average_threadhold)
     # Based on tracking
