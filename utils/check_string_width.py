@@ -16,7 +16,7 @@ def head_tail_size_comparision(ratio_list, diff_ratio):
     else:
         two_side_ratio = second_side/first_size
         big_side = 1
-    print(two_side_ratio)
+    # print(two_side_ratio)
     if two_side_ratio > diff_ratio:
         return True, big_side
     else:
