@@ -43,9 +43,9 @@ def get_side_size(string_pixel_list, head_tail_diff_ratio):
         if collision:
             print(ratio_list)
             if biger_side == 0:
-                draw_point = [[min_x_side, y_pos] for y_pos in np.where(string_pixel_list[:,0]==min_x_side)[0]]
+                draw_point = np.take(string_pixel_list, np.where(string_pixel_list[:,0]==min_x_side)[0],0)
             else:
-                draw_point = [[max_x_size, y_pos] for y_pos in np.where(string_pixel_list[:,0]==max_x_size)[0]]
+                draw_point = np.take(string_pixel_list, np.where(string_pixel_list[:,0]==max_x_size)[0],0)
     return collision, draw_point
 
 def check3point(string_pixel_list,three_position, element_index):

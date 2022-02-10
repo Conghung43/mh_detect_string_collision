@@ -1,4 +1,3 @@
-from tracemalloc import start
 import cv2
 from numpy import imag
 from display import visualization
@@ -25,25 +24,25 @@ def image_processing(image, crop_value, threadhold_value, head_tail_diff_ratio):
     print(end_time - start_time)
     # return
     # print(crop_image.shape[0])
-    # for label_index in range(label.min(),label.max(),1):
-    #     first_array = np.take(pixel_list, 
-    #                     (np.where(label == label_index)[0]), 
-    #                     0)
-    #     x_list = first_array[:,0]
-    #     x_max =  x_list.max() -  x_list.min()
-    #     if x_max*1.5 > crop_image.shape[0]:
-    #         print(len(first_array[:,0]))
-    #         # continue
-    #         collision, draw_points = check_string_width.get_side_size(first_array,head_tail_diff_ratio)
-    #         if collision:
-    #             # start_point = np.array(draw_points[0])+ np.array([crop_value[0][0],crop_value[1][0]])
-    #             # end_point = tuple(np.array(draw_points[-1])+ np.array([crop_value[1][0],crop_value[0][0]]))
-    #             # image = cv2.circle(image, (start_point[1],start_point[0]), 2, [0,255,255], 5)
+    for label_index in range(label.min(),label.max(),1):
+        first_array = np.take(pixel_list, 
+                        (np.where(label == label_index)[0]), 
+                        0)
+        x_list = first_array[:,0]
+        x_max =  x_list.max() -  x_list.min()
+        if x_max*1.5 > crop_image.shape[0]:
+            # continue
+            collision, draw_points = check_string_width.get_side_size(first_array,head_tail_diff_ratio)
+            if collision:
+                print(label_index)
+                start_point = np.array(draw_points[0])+ np.array([crop_value[0][0],crop_value[1][0]])
+                # end_point = tuple(np.array(draw_points[-1])+ np.array([crop_value[1][0],crop_value[0][0]]))
+                image = cv2.circle(image, (start_point[1],start_point[0]), 2, [0,255,255], 5)
 
-    #             crop_image_color = cv2.circle(crop_image_color, (draw_points[0][1],draw_points[0][0]), 2, [0,255,255], 5)
+                # crop_image_color = cv2.circle(crop_image_color, (draw_points[0][1],draw_points[0][0]), 2, [0,255,255], 5)
 
-    # cv2.imshow('image', crop_image_color)
-    # cv2.waitKey(0)
+                cv2.imshow('image', image)
+                cv2.waitKey(0)
         # f =  open('testing_set/{}.npy'.format('first_array'), 'a') 
         # np.save('testing_set/{}.npy'.format('first_array'), first_array)
         # f.close()
