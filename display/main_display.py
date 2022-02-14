@@ -4,7 +4,7 @@ from display import visualization
 import numpy as np
 def draw_cut_line(image, line_y_postion, color):
     heigh, width = image.shape[:2]
-    cv2.line(image, (0,int(line_y_postion*heigh)), (width,int(line_y_postion*heigh)), color, 1)
+    cv2.line(image, (0,int(line_y_postion)), (width,int(line_y_postion)), color, 1)
     visualization.write_image('display', 'test_cut_line', image)
 
 def draw_detected_white_line(image, string_property_list):
