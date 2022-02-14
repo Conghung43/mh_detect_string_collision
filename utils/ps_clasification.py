@@ -8,12 +8,12 @@ from sklearn.cluster import DBSCAN
 from utils import ps_status_check
 from scipy.spatial import ConvexHull
 from PIL import Image, ImageDraw
+from imantics import Polygons, Mask
 def switch_xy(points):
     points = np.flip(points, 1)
     return points
 
 def dbscan(image, threadhold_value, config):
-    start_time = time.time()
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     crop_image = gray[config.crop_y[0]:config.crop_y[1], config.crop_x[0]:config.crop_x[1]]
     crop_image_color = image[config.crop_y[0]:config.crop_y[1], config.crop_x[0]:config.crop_x[1]]
@@ -23,26 +23,33 @@ def dbscan(image, threadhold_value, config):
     pixel_list = np.argwhere(converted_image == 255)
     clustering = DBSCAN(eps=6, min_samples=30).fit(pixel_list)
     label = clustering.labels_
-    end_time = time.time()
-    print(end_time - start_time)
+
     collision_occurred = False
     for label_index in range(label.min(),label.max(),1):
         current_ps_pixel_data = np.take(pixel_list, 
                         (np.where(label == label_index)[0]), 
                         0)
         current_ps_pixel_data = switch_xy(current_ps_pixel_data)
-        img = Image.new('L', (gray.shape[1], gray.shape[0]), 0)
-        ImageDraw.Draw(img).polygon(current_ps_pixel_data, outline=1, fill=1)
-        mask = np.array(img)
+        new_array = np.zeros((current_ps_pixel_data[:,1].max()+10,current_ps_pixel_data[:,0].max()+10))
+        start_time = time.time()
+        new_array[current_ps_pixel_data[:,1],current_ps_pixel_data[:,0]] = 1
+        # img = Image.new('L', (gray.shape[1], gray.shape[0]), 0)
+        # ImageDraw.Draw(img).polygon(current_ps_pixel_data, outline=1, fill=1)
+        # mask = np.array(img)
         # polygons = current_ps_pixel_data[np.array(list(alpha_shape(current_ps_pixel_data,1000)))]
-        polygons = current_ps_pixel_data[ConvexHull(current_ps_pixel_data).vertices]
+        # polygons = current_ps_pixel_data[ConvexHull(current_ps_pixel_data).vertices]
+        polygons = Mask(new_array).polygons()
+        polygons = polygons.polygons[0].reshape(-1,2)
+        end_time = time.time()
+        print(end_time - start_time)
+        # continue
         for index, point in enumerate(polygons):
             if index < len(polygons) - 2:
-                crop_img = cv2.line(crop_image_color, tuple([point[1],point[0]]), tuple([polygons[index+1][1], polygons[index+1][0]]), [0,0,255], 1)
+                crop_img = cv2.line(crop_image_color, tuple(point), tuple(polygons[index+1]), [0,0,255], 1)
                 # point = point[0]
                 # crop_img = cv2.line(crop_image_color, tuple([point[1],point[0]]), tuple([polygons[index+1][0][1], polygons[index+1][0][0]]), [0,0,255], 1)
             else:
-                crop_img = cv2.line(crop_image_color, tuple([point[1],point[0]]), tuple([polygons[0][1], polygons[0][0]]), [0,0,255], 1)
+                crop_img = cv2.line(crop_image_color, tuple(point), tuple(polygons[0]), [0,0,255], 1)
         cv2.imshow('image', crop_img)
         cv2.waitKey(1)
         continue
