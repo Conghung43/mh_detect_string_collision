@@ -8,7 +8,7 @@ from sklearn.cluster import DBSCAN
 from utils import ps_status_check
 from scipy.spatial import ConvexHull
 from PIL import Image, ImageDraw
-from imantics import Polygons, Mask
+# from imantics import Polygons, Mask
 def switch_xy(points):
     points = np.flip(points, 1)
     return points
@@ -32,14 +32,14 @@ def dbscan(image, threadhold_value, config):
         current_ps_pixel_data = switch_xy(current_ps_pixel_data)
         new_array = np.zeros((current_ps_pixel_data[:,1].max()+10,current_ps_pixel_data[:,0].max()+10))
         start_time = time.time()
-        new_array[current_ps_pixel_data[:,1],current_ps_pixel_data[:,0]] = 1
+        # new_array[current_ps_pixel_data[:,1],current_ps_pixel_data[:,0]] = 1
         # img = Image.new('L', (gray.shape[1], gray.shape[0]), 0)
         # ImageDraw.Draw(img).polygon(current_ps_pixel_data, outline=1, fill=1)
         # mask = np.array(img)
         # polygons = current_ps_pixel_data[np.array(list(alpha_shape(current_ps_pixel_data,1000)))]
-        # polygons = current_ps_pixel_data[ConvexHull(current_ps_pixel_data).vertices]
-        polygons = Mask(new_array).polygons()
-        polygons = polygons.polygons[0].reshape(-1,2)
+        polygons = current_ps_pixel_data[ConvexHull(current_ps_pixel_data).vertices]
+        # polygons = Mask(new_array).polygons()
+        # polygons = polygons.polygons[0].reshape(-1,2)
         end_time = time.time()
         print(end_time - start_time)
         # continue
